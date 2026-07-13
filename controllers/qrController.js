@@ -13,9 +13,7 @@ const buildQRDataUrl = async (sessionId, token) => {
     return QRCode.toDataURL(payload, { errorCorrectionLevel: "M", margin: 1, width: 320 });
 };
 
-// @desc Teacher starts a class -> creates a session + first QR token
-// @route POST /api/qr/start
-// body: { routine, class, section, subject, lat, lng }
+
 const startClass = async (req, res) => {
     try {
         const teacher = await Teacher.findOne({ user: req.user._id });
@@ -58,9 +56,7 @@ const startClass = async (req, res) => {
     }
 };
 
-// @desc Rotate (regenerate) the QR token for an active session.
-// Call this every ROTATE_SECONDS from the frontend (setInterval) or a server-side cron/socket loop.
-// @route POST /api/qr/:sessionId/rotate
+
 const rotateToken = async (req, res) => {
     try {
         const session = await QRSession.findById(req.params.sessionId);
@@ -86,8 +82,7 @@ const rotateToken = async (req, res) => {
     }
 };
 
-// @desc Teacher ends the class -> session becomes inactive, no more scans accepted
-// @route POST /api/qr/:sessionId/end
+
 const endClass = async (req, res) => {
     try {
         const session = await QRSession.findByIdAndUpdate(

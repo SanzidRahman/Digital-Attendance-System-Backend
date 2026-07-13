@@ -10,6 +10,7 @@ const todayStr = () => new Date().toISOString().slice(0, 10);
 // @desc Student scans the QR code -> validates token + GPS -> marks attendance
 // @route POST /api/attendance/scan
 // body: { sessionId, token, lat, lng }
+
 const scanQR = async (req, res) => {
     try {
         const { sessionId, token, lat, lng } = req.body;

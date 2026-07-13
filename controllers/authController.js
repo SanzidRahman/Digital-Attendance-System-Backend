@@ -3,7 +3,7 @@ const Student = require("../models/Student");
 const Teacher = require("../models/Teacher");
 const generateToken = require("../utils/generateToken");
 
-// @desc Register a new user (admin creates teacher/student accounts, or self-signup for demo)
+
 // @route POST /api/auth/register
 const register = async (req, res) => {
     try {
@@ -41,7 +41,7 @@ const register = async (req, res) => {
     }
 };
 
-// @desc Login
+
 // @route POST /api/auth/login
 const login = async (req, res) => {
     try {
@@ -73,7 +73,7 @@ const login = async (req, res) => {
     }
 };
 
-// @desc Get current logged-in user
+
 // @route GET /api/auth/me
 const getMe = async (req, res) => {
     res.json({ user: req.user });

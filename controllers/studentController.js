@@ -1,8 +1,7 @@
 const Student = require("../models/Student");
 const LeaveApplication = require("../models/LeaveApplication");
 
-// @desc Admin: list/search students
-// @route GET /api/students?class=&section=
+
 const listStudents = async (req, res) => {
     try {
         const { class: cls, section } = req.query;
@@ -16,8 +15,7 @@ const listStudents = async (req, res) => {
     }
 };
 
-// @desc Student: submit a leave application
-// @route POST /api/students/leave
+
 const applyLeave = async (req, res) => {
     try {
         const student = await Student.findOne({ user: req.user._id });
@@ -31,8 +29,7 @@ const applyLeave = async (req, res) => {
     }
 };
 
-// @desc Teacher: approve/reject a leave application
-// @route PATCH /api/students/leave/:id
+
 const reviewLeave = async (req, res) => {
     try {
         const { status } = req.body; // "approved" | "rejected"
@@ -44,8 +41,7 @@ const reviewLeave = async (req, res) => {
     }
 };
 
-// @desc Parent: search student and get attendance stats
-// @route GET /api/students/parent-view?search=
+
 const getStudentAttendanceForParent = async (req, res) => {
     try {
         const { search } = req.query;

@@ -152,7 +152,7 @@ const seed = async () => {
         for (let i = 20; i >= 1; i--) {
             const date = new Date(today);
             date.setDate(today.getDate() - i);
-            
+
             // Skip weekends
             const dayOfWeek = date.getDay();
             if (dayOfWeek === 5 || dayOfWeek === 6) continue; // Skip Fri/Sat in BD context

@@ -15,12 +15,12 @@ const studentRoutes = require("./routes/studentRoutes");
 connectDB();
 
 const app = express();
-app.use(cors({ origin: process.env.CLIENT_URL || "*" }));
+app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
 app.use(express.json());
 
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: { origin: process.env.CLIENT_URL || "*" },
+    cors: { origin: process.env.CORS_ORIGIN || "*" },
 });
 
 // Make io accessible inside controllers via req.app.get("io")
@@ -52,5 +52,5 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: "Server error" });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
