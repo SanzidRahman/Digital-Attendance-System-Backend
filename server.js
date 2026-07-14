@@ -18,7 +18,8 @@ connectDB();
 const app = express();
 app.use(
     cors({
-        origin: [process.env.CORS_ORIGIN, "https://digital-attendance-system-frontend-alpha.vercel.app"].filter(Boolean),
+        origin: [process.env.CORS_ORIGIN,
+            "https://digital-attendance-system-frontend.vercel.app"].filter(Boolean),
         credentials: true,
     })
 );
@@ -26,7 +27,7 @@ app.use(express.json());
 
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: { origin: process.env.CORS_ORIGIN || "https://digital-attendance-system-frontend-alpha.vercel.app", credentials: true },
+    cors: { origin: process.env.CORS_ORIGIN || "https://digital-attendance-system-frontend.vercel.app", credentials: true },
 });
 
 // Make io accessible inside controllers via req.app.get("io")
