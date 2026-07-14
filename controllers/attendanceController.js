@@ -7,10 +7,8 @@ const { getDistanceInMeters } = require("../utils/geo");
 const MAX_DISTANCE = Number(process.env.GPS_MAX_DISTANCE_METERS || 100);
 const todayStr = () => new Date().toISOString().slice(0, 10);
 
-// @desc Student scans the QR code -> validates token + GPS -> marks attendance
-// @route POST /api/attendance/scan
-// body: { sessionId, token, lat, lng }
 
+// body: { sessionId, token, lat, lng }
 const scanQR = async (req, res) => {
     try {
         const { sessionId, token, lat, lng } = req.body;
@@ -80,8 +78,7 @@ const scanQR = async (req, res) => {
     }
 };
 
-// @desc Teacher marks attendance manually for one or more students
-// @route POST /api/attendance/manual
+
 // body: { class, section, subject, date, records: [{ studentId, status }] }
 const markManual = async (req, res) => {
     try {
@@ -141,7 +138,7 @@ const markManual = async (req, res) => {
     }
 };
 
-// @desc Teacher/Admin edits a single attendance record
+
 // @route PATCH /api/attendance/:id
 const editAttendance = async (req, res) => {
     try {
@@ -154,7 +151,7 @@ const editAttendance = async (req, res) => {
     }
 };
 
-// @desc Student's own attendance history + percentage
+
 // @route GET /api/attendance/history
 const myHistory = async (req, res) => {
     try {
@@ -176,7 +173,7 @@ const myHistory = async (req, res) => {
     }
 };
 
-// @desc Teacher's daily report for a class/section/subject
+
 // @route GET /api/attendance/daily-report?class=&section=&subject=&date=
 const dailyReport = async (req, res) => {
     try {
