@@ -14,8 +14,13 @@ const buildQRDataUrl = async (sessionId, token) => {
 };
 
 
+
+
+
+
 const startClass = async (req, res) => {
     try {
+
         const teacher = await Teacher.findOne({ user: req.user._id });
         if (!teacher) return res.status(404).json({ message: "Teacher profile not found" });
 
