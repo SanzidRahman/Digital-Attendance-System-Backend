@@ -66,13 +66,15 @@ const rotateToken = async (req, res) => {
         const teacher = await Teacher.findOne({ user: req.user._id });
         if (!teacher) return res.status(404).json({ message: "Teacher profile not found" });
 
-        const session = await QRSession.findOne({
-            _id: req.params.sessionId,
-            teacher: teacher._id,
-            isActive: true,
-        });
-        if (!session || !session.isActive) {
-            return res.status(404).json({ message: "Active session not found" });
+        const session = await QRSession.findById(req.params.sessionId);
+        if (!session) return res.status(404).json({ message: "QR session not found" });
+        if (!session.teacher.equals(teacher._id)) {
+            return res.status(403).json({ message: "You cannot rotate another teacher's QR session" });
+        }
+        if (!session.isActive) {
+            return res.status(409).json({
+                message: `This class session was ended${session.endedAt ? ` at ${session.endedAt.toISOString()}` : ""}. Start a new session to rotate its QR code.`,
+            });
         }
 
         session.currentToken = generateRawToken();
@@ -96,12 +98,22 @@ const rotateToken = async (req, res) => {
 
 const endClass = async (req, res) => {
     try {
-        const session = await QRSession.findByIdAndUpdate(
-            req.params.sessionId,
-            { isActive: false, endedAt: new Date() },
-            { new: true }
-        );
+        const teacher = await Teacher.findOne({ user: req.user._id });
+        if (!teacher) return res.status(404).json({ message: "Teacher profile not found" });
+
+        const session = await QRSession.findById(req.params.sessionId);
         if (!session) return res.status(404).json({ message: "Session not found" });
+        if (!session.teacher.equals(teacher._id)) {
+            return res.status(403).json({ message: "You cannot end another teacher's class session" });
+        }
+        if (!session.isActive) {
+            return res.status(409).json({ message: "This class session has already ended" });
+        }
+
+        session.isActive = false;
+        session.endedAt = new Date();
+        await session.save();
+        console.warn(`QR session ${session._id} ended by teacher ${teacher._id} at ${session.endedAt.toISOString()}`);
         res.json({ message: "Class ended", session });
     } catch (err) {
         res.status(500).json({ message: err.message });
