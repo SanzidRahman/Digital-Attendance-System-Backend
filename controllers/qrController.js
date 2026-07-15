@@ -14,10 +14,6 @@ const buildQRDataUrl = async (sessionId, token) => {
 };
 
 
-
-
-
-
 const startClass = async (req, res) => {
     try {
 
@@ -39,6 +35,9 @@ const startClass = async (req, res) => {
             currentToken: token,
             tokenExpiresAt: new Date(Date.now() + ROTATE_SECONDS * 1000),
             location: { lat, lng },
+            // Be explicit so QR rotation remains valid even if schema defaults
+            // change or an older deployment has a different default.
+            isActive: true,
         });
 
         const qrDataUrl = await buildQRDataUrl(session._id, token);
@@ -64,7 +63,14 @@ const startClass = async (req, res) => {
 
 const rotateToken = async (req, res) => {
     try {
-        const session = await QRSession.findById(req.params.sessionId);
+        const teacher = await Teacher.findOne({ user: req.user._id });
+        if (!teacher) return res.status(404).json({ message: "Teacher profile not found" });
+
+        const session = await QRSession.findOne({
+            _id: req.params.sessionId,
+            teacher: teacher._id,
+            isActive: true,
+        });
         if (!session || !session.isActive) {
             return res.status(404).json({ message: "Active session not found" });
         }
