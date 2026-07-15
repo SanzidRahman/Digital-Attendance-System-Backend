@@ -47,6 +47,7 @@ const startClass = async (req, res) => {
             sessionId: session._id,
             qrDataUrl,
             expiresAt: session.tokenExpiresAt,
+            rotateSeconds: ROTATE_SECONDS,
         });
 
         res.status(201).json({
@@ -89,7 +90,12 @@ const rotateToken = async (req, res) => {
             expiresAt: session.tokenExpiresAt,
         });
 
-        res.json({ sessionId: session._id, qrDataUrl, expiresAt: session.tokenExpiresAt });
+        res.json({
+            sessionId: session._id,
+            qrDataUrl,
+            expiresAt: session.tokenExpiresAt,
+            rotateSeconds: ROTATE_SECONDS,
+        });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
