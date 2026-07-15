@@ -113,7 +113,14 @@ const endClass = async (req, res) => {
         session.isActive = false;
         session.endedAt = new Date();
         await session.save();
-        console.warn(`QR session ${session._id} ended by teacher ${teacher._id} at ${session.endedAt.toISOString()}`);
+        console.warn("QR session ended", {
+            sessionId: session._id.toString(),
+            teacherId: teacher._id.toString(),
+            endedAt: session.endedAt.toISOString(),
+            ip: req.ip,
+            forwardedFor: req.get("x-forwarded-for") || null,
+            userAgent: req.get("user-agent") || null,
+        });
         res.json({ message: "Class ended", session });
     } catch (err) {
         res.status(500).json({ message: err.message });
