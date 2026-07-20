@@ -30,7 +30,7 @@ const startClass = async (req, res) => {
             routine,
             teacher: teacher._id,
             class: cls,
-            section,
+            section: "All",
             subject,
             currentToken: token,
             tokenExpiresAt: new Date(Date.now() + ROTATE_SECONDS * 1000),
@@ -39,6 +39,8 @@ const startClass = async (req, res) => {
             // change or an older deployment has a different default.
             isActive: true,
         });
+
+
 
         const qrDataUrl = await buildQRDataUrl(session._id, token);
 
